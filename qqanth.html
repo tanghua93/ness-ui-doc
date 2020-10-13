@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Document</title>
+    </head>
+    <body>
+        <div id="app">
+            欢迎您， <span class="account-name" style="display: none;"> </span>
+            <span class="role-name" style="display: none;"> </span>
+            <span class="bind-account btn" onclick="instance.onShowLogin()" id="login">
+                [绑定账号]
+            </span>
+            <span class="change-account btn" onclick="instance.handleBindAccount();" style="display: none;">[切换账号]</span>
+            <span class="bind-role btn" onclick="instance.handleBindRole()" style="display: none;">
+                [绑定角色]
+            </span>
+            <span class="change-role btn" onclick="instance.handleBindRole()" style="display: none;">[切换角色]</span>
+        </div>
+        <script src="https://admin.livelink.qq.com/sdk/llink-v1.0.1.min.js"></script>
+    </body>
+    <style>
+        #llink-account-pannel {
+      color: rgb(43, 14, 14);
+      font-size: 25px;
+    }
+    .btn {
+      cursor: pointer;
+    }
+  </style>
+    <script type="text/javascript" charset="utf-8" src="http://connect.qq.com/qc_jssdk.js" data-appid="101378919"
+        data-redirecturi="http://192.168.191.71:8848/end"></script>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.1.0/axios.min.js">
+
+    </script>
+    <script>
+        var instance;
+
+        //新建cf角色选择框实例
+        instance = new llink.Selector();
+        console.log(instance)
+            function onShowLogin() {
+              alert("弹出qq/微信登录框");
+              // 显示wx/qq登录框，
+              // 授权之后获取到wx/qq登录态，例如：{"access_token":"D4AAFFADAADD6061ECB55B44A4BE79F3","appid":"101047385","openid":"430F7EF557C902B0DDF462EFC3F01C32"}
+              //需要重新生成code并调用init初始化
+            }
+            instance.onShowLogin = onShowLogin;
+        function onUserDataUpdated(bindInfo) {
+            console.log("bindInfo", bindInfo);
+
+            var accountName = document.getElementsByClassName("account-name")[0];
+            var roleName = document.getElementsByClassName("role-name")[0];
+            var bindAccountBtn = document.getElementsByClassName("bind-account")[0];
+            var changeAccountBtn = document.getElementsByClassName(
+                "change-account"
+            )[0];
+            var bindRoleBtn = document.getElementsByClassName("bind-role")[0];
+            var changeRoleBtn = document.getElementsByClassName("change-role")[0];
+
+            //初始化
+            accountName.style.display = "none";
+            roleName.style.display = "none";
+            bindAccountBtn.style.display = "none";
+            changeAccountBtn.style.display = "none";
+            bindRoleBtn.style.display = "none";
+            changeRoleBtn.style.display = "none";
+
+            //根据绑定信息更新页面
+            if (bindInfo && bindInfo.currAccount) {
+                accountName.innerHTML =
+                    "欢迎您" + bindInfo.currAccount.nickName + "&emsp;&emsp;";
+                accountName.style.display = "inline-block";
+                if (bindInfo.currRole) {
+                    roleName.innerHTML = bindInfo.currRole.roleName;
+                    roleName.style.display = "inline-block";
+                    changeAccountBtn.style.display = "inline-block";
+                    changeRoleBtn.style.display = "inline-block";
+                } else {
+                    changeAccountBtn.style.display = "inline-block";
+                    bindRoleBtn.style.display = "inline-block";
+                }
+            } else {
+                bindAccountBtn.style.display = "inline-block";
+            }
+        }
+        axios({
+            method: 'post',
+            url: 'http://192.168.191.159:8080/get/code',
+            data: {
+                uid: '101906633',
+                accessToken: '97E3FB3F2CCF5D3C6D2568B2838F1A41',
+                openId: '8084879AC34EF661890B7BAEF25F9C42',
+                appId: '101906633',
+                isAnchor: 1
+            }
+        }).then((data) => {
+            console.log(Math.floor(Math.random()*100000000))
+            instance.init({
+                livePlatId: 'wzsq', //    直播平台 ID，由直播平台统一分配(必填)
+                gameId: 'yxzj', //业务id
+                actId: 'oojhjhhdiVa28UpyL5G', //活动 ID，可在 livelink 上分配(必填)
+                t: data.time, //时间戳，精确到秒(必填)
+                v: '1.1', //版本号，当前迭代版本为 1.1(必填)
+                sig: data.data, //请求参数加密，(必填)
+                code: data.data, //由uid，access_token ，appid，openid加密生成(未授权登录时则只有uid)
+                nonce: Math.floor(Math.random()*100000000), //随 8 位机字符串，字符串范围：0-9z-A(必填)
+                logintype:'qq', // 支持 ‘wx’（微信）‘qq’（手 Q） 'ks'（快手）(必填)
+                callbacks: {
+                    onUserDataUpdated: onUserDataUpdated, //初始化后，根据绑定信息更新界面的回调：onInitialed
+                    onShowLogin:onShowLogin
+                },
+            });
+            console.log(instance)
+        })
+    </script>
+    <script>
+        QC.Login({
+            btnId: 'login'
+        })
+    </script>
+
+</html>
