@@ -30,7 +30,7 @@
       cursor: pointer;
     }
   </style>
-    <script type="text/javascript" charset="utf-8" src="http://connect.qq.com/qc_jssdk.js" data-appid="101378919"
+    <script type="text/javascript" charset="utf-8" src="https://connect.qq.com/qc_jssdk.js" data-appid="101378919"
         data-redirecturi="http://192.168.191.71:8848/end"></script>
 
     <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.1.0/axios.min.js">
@@ -87,35 +87,36 @@
                 bindAccountBtn.style.display = "inline-block";
             }
         }
-        axios({
-            method: 'post',
-            url: 'http://192.168.191.159:8080/get/code',
-            data: {
-                uid: '101906633',
-                accessToken: '97E3FB3F2CCF5D3C6D2568B2838F1A41',
-                openId: '8084879AC34EF661890B7BAEF25F9C42',
-                appId: '101906633',
-                isAnchor: 1
-            }
-        }).then((data) => {
-            console.log(Math.floor(Math.random()*100000000))
-            instance.init({
-                livePlatId: 'wzsq', //    直播平台 ID，由直播平台统一分配(必填)
-                gameId: 'yxzj', //业务id
-                actId: 'oojhjhhdiVa28UpyL5G', //活动 ID，可在 livelink 上分配(必填)
-                t: data.time, //时间戳，精确到秒(必填)
-                v: '1.1', //版本号，当前迭代版本为 1.1(必填)
-                sig: data.data, //请求参数加密，(必填)
-                code: data.data, //由uid，access_token ，appid，openid加密生成(未授权登录时则只有uid)
-                nonce: Math.floor(Math.random()*100000000), //随 8 位机字符串，字符串范围：0-9z-A(必填)
-                logintype:'qq', // 支持 ‘wx’（微信）‘qq’（手 Q） 'ks'（快手）(必填)
-                callbacks: {
-                    onUserDataUpdated: onUserDataUpdated, //初始化后，根据绑定信息更新界面的回调：onInitialed
-                    onShowLogin:onShowLogin
-                },
-            });
-            console.log(instance)
-        })
+        // axios({
+        //     method: 'post',
+        //     url: 'http://192.168.191.159:8080/get/code',
+        //     data: {
+        //         uid: '101906633',
+        //         accessToken: '97E3FB3F2CCF5D3C6D2568B2838F1A41',
+        //         openId: '8084879AC34EF661890B7BAEF25F9C42',
+        //         appId: '101906633',
+        //         isAnchor: 1
+        //     }
+        // }).then((data) => {
+        //     console.log(Math.floor(Math.random()*100000000))
+            
+        //     console.log(instance)
+        // })
+        instance.init({
+            livePlatId: 'wzsq', //    直播平台 ID，由直播平台统一分配(必填)
+            gameId: 'yxzj', //业务id
+            actId: 'oojhjhhdiVa28UpyL5G', //活动 ID，可在 livelink 上分配(必填)
+            t: data.time, //时间戳，精确到秒(必填)
+            v: '1.1', //版本号，当前迭代版本为 1.1(必填)
+            sig: 'llm4cNDGGnmw1EUQXnCG0w==', //请求参数加密，(必填)
+            code: 'llm4cNDGGnmw1EUQXnCG0w==', //由uid，access_token ，appid，openid加密生成(未授权登录时则只有uid)
+            nonce: Math.floor(Math.random()*100000000), //随 8 位机字符串，字符串范围：0-9z-A(必填)
+            logintype:'qq', // 支持 ‘wx’（微信）‘qq’（手 Q） 'ks'（快手）(必填)
+            callbacks: {
+                onUserDataUpdated: onUserDataUpdated, //初始化后，根据绑定信息更新界面的回调：onInitialed
+                onShowLogin:onShowLogin
+            },
+        });
     </script>
     <script>
         QC.Login({
