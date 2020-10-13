@@ -106,7 +106,7 @@
             livePlatId: 'wzsq', //    直播平台 ID，由直播平台统一分配(必填)
             gameId: 'yxzj', //业务id
             actId: 'oojhjhhdiVa28UpyL5G', //活动 ID，可在 livelink 上分配(必填)
-            t: data.time, //时间戳，精确到秒(必填)
+            t: new Date().getTime(), //时间戳，精确到秒(必填)
             v: '1.1', //版本号，当前迭代版本为 1.1(必填)
             sig: 'llm4cNDGGnmw1EUQXnCG0w==', //请求参数加密，(必填)
             code: 'llm4cNDGGnmw1EUQXnCG0w==', //由uid，access_token ，appid，openid加密生成(未授权登录时则只有uid)
